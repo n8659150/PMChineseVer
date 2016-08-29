@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" ng-app="ProjectMinder">
+	<head>
+	  <meta charset="UTF-8">
+	  <title>Project Minder Login</title>
+	  <meta name="viewport" content="width=device-width, user-scalable=no">
+	  <!-- fonts -->
+	  <link href='https://fonts.googleapis.com/css?family=Lato:400,100,700,900' rel='stylesheet' type='text/css'>
+	  <!-- Bootstrap core CSS (Localstorage)-->
+	  <link href="style/bootstrap.min.css" rel="stylesheet">
+
+	  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	  <link href="style/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+	  <!-- angularJS -->
+	  <script src="js/lib/angular/angular.min.js"></script>
+	  <script src="js/lib/angular/angular-route.min.js"></script>
+	  <script src="js/lib/angular/angular-animate.min.js"></script>
+
+	  <!-- angular-ui-bootstrap -->
+	  <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js">
+	  </script>
+
+	  <!-- dir-pagination -->
+	  <script src="js/lib/dirPagination.js"></script>
+
+	  <!-- Firebase -->
+	  <!-- <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+	  <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js">
+	  </script> -->
+	  <!-- Wilddog -->
+	  <script src="https://cdn.wilddog.com/sdk/js/current/wilddog.js"></script>
+	  <!-- Wild-Angular -->
+	  <script src="https://cdn.wilddog.com/libs/wild-angular/0.0.2/wild-angular.min.js"></script>
+	  <!-- customize JS -->
+	  <script src="js/angular-mailto.js"></script>
+	  <script src="js/app.js"></script>
+	  <script src="js/services/authentication.js"></script>
+	  <script src="js/services/crud.js"></script>
+	  <script src="js/controllers/registration.js"></script>
+	  <script src="js/controllers/mainCtrl.js"></script>
+	</head>
+
+	<body>
+
+    <!-- QUT-STYLE HEADER -->
+    <div ng-controller="RegistrationController" ng-show="currentUser">
+	    <div id="QUT-header-wrapper">
+	    	<div id="QUT-header">
+	    		<a id="QUT-logo" href="https://www.qut.edu.au">
+	    			<img src="imgs/site-logo.png" style="float:left; margin-right:17px;"/>
+	    			<h1 style="color:#fff; font-size:2.5em;line-height:1.5em; margin:0; float:left;">Project Minder</h1>
+	    		</a>
+	          	<div id="blue-bar">
+	          	</div>
+	          	<div id="current-date">
+	          		<span id="top-date">
+	          			<script type="text/javascript">
+							var m_names = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
+							var d = new Date();
+							var curr_date = d.getDate();
+							var curr_month = d.getMonth();
+							var curr_year = d.getFullYear();
+							document.write(curr_date + " " + m_names[curr_month] + " " + curr_year);
+	          			</script>
+	          		</span>
+	          		<!-- END top-date -->
+	          	</div>
+	          	<!-- END current-date -->
+	    	</div>
+	    	<!-- END QUT-header -->
+	    </div>
+    <!-- END QUT-STYLE HEADER -->
+	    <div id="QUT-menubar">
+	    	<!-- <ul class="nav navbar-nav navbar-right"> -->
+	    	<ul id="menubar">
+	    		<li class="menuItem">
+	    			<a class="menuLink" ng-href="#/login" ng-click="logout()">
+	    				<span class="menuLinkSpan">Logout</span>
+	    			</a>
+	    		</li>
+	            <li class="menuItem">
+	            	<a class="menuLink">
+	            		<span class="menuLinkSpan">Hi {{currentUser.firstname}}</span>
+	            	</a>
+	            </li> 
+	          </ul> 
+	    </div>
+    </div>
+
+    <div id="wrapper" ng-view>
+
+    </div>
+
+	<div class="footer" ng-show="currentUser">
+		<footer>
+			<div id="footer-content">
+				
+					<ul id="footer-page-menu">			
+						<li class="page_item page-item-39"><a href="https://www.student.qut.edu.au/about/contact" target="_blank">Get in touch</a></li> <!-- Get In Touch -->
+						<li><a href="http://www.student.qut.edu.au/enrolment-and-orientation/enrolment/using-estudent" target="_blank">Help</a></li> <!-- eStudent Help -->
+						<li><a href="http://www.student.qut.edu.au/about/contact/leave-feedback" target="_blank">Leave feedback</a></li> <!-- TellQUT -->
+						<li><a href="http://ask.qut.edu.au" target="_blank">Ask us a question</a></li> <!-- AskQUT -->
+					</ul>
+				
+				<ul id="footer-social-media-links">
+					<li id="facebook-footer-icon"><a href="http://www.facebook.com/QUTBrisbane" target="_blank"><img src="imgs/facebook-icon-footer.png"></a></li>
+					<li id="twitter-footer-icon"><a href="http://twitter.com/qut" target="_blank"><img src="imgs/twitter-icon-footer.png"></a></li>
+					<li id="youtube-footer-icon"><a href="http://www.youtube.com/user/TheQUTube" target="_blank"><img src="imgs/youtube-icon-footer.png"></a></li>
+					<li id="itunesu-footer-icon"><a href="http://itunes.apple.com/au/institution/queensland-university-of-technology/id456443622" target="_blank"><img src="imgs/itunesu-icon-footer.png" alt="QUT on iTunes U"></a></li>
+					<li id="linkedin-footer-icon"><a href="http://www.linkedin.com/company/165624" target="_blank"><img src="imgs/linkedin-icon-footer.png" alt="QUT on LinkedIn"></a></li>
+				</ul>
+				
+			</div>
+
+			<div id="footer-supplementary-wrapper">
+				<div id="footer-supplementary">
+					<div id="footer-supplementary-information">
+						<span>
+							<abbr title="Commonwealth Register of Institutions and Courses for Overseas Students">CRICOS</abbr> No. 00213J
+						</span> 
+						<abbr title="Australian Business Number">ABN</abbr> 83 791 724 622
+					</div>
+					
+						<ul>
+							<li><a href="http://www.student.qut.edu.au/about/accessibility" target="_blank">Accessibility</a></li> <!-- Accessibility -->
+							<li><a href="http://www.student.qut.edu.au/about/copyright" target="_blank">Copyright</a></li> <!-- Copyright -->
+							<li><a href="http://www.student.qut.edu.au/about/disclaimer" target="_blank">Disclaimer</a></li> <!-- Disclaimer -->
+							<li><a href="http://www.student.qut.edu.au/about/privacy" target="_blank">Privacy</a></li> <!-- Privacy -->
+							<li><a href="http://www.qut.edu.au/additional/right-to-information" target="_blank">Right to Information</a></li> <!-- Right to Information -->
+						</ul>
+					
+				</div>
+			</div>
+		</footer>
+	</div>
+</body>
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="js/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+</html>

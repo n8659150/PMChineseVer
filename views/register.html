@@ -1,0 +1,76 @@
+<head>
+
+  <!-- Custom styles for this template -->
+  <link href="style/login.css" rel="stylesheet">
+  
+</head>
+    
+<section class="card register">
+  <form name="myform"
+    ng-submit="register()"
+    novalidate>
+
+    <h1 class="qutheader">PROJECT MINDER</h1>
+    <div class="textintro">
+      <p class="message" 
+        ng-show="message"> {{ message }}</p>
+    </div>
+
+    <fieldset  class="qutinputgroup">
+      <input class="qutinput" type="text" name="firstname" placeholder="First Name"
+      ng-model="user.firstname" ng-required="true">
+      <p class="error validationerror"
+      ng-show="myform.firstname.$invalid && myform.firstname.$touched">
+      First name required</p>
+
+      <input  class="qutinput" type="text" name="lastname" placeholder="Last Name"
+      ng-model="user.lastname" ng-required="true">
+      <p class="error validationerror"
+      ng-show="myform.lastname.$invalid && myform.lastname.$touched">
+      Last name required</p>
+
+      <input class="qutinput" type="email" name="email" placeholder="Email"
+      ng-model="user.email" ng-required="true">
+      <p class="error validationerror"
+      ng-show="myform.email.$invalid && myform.email.$touched">
+      Must be a valid email</p>
+
+      <input class="qutinput" type="password" name="password" placeholder="Password"
+      ng-model="user.password" ng-required="true">
+      <p class="error validationerror"
+      ng-show="myform.password.$invalid && myform.password.$touched">
+      Password is required</p>
+      
+      <div class="roleGroup">
+      <input class="qutinput qutRadio" type="radio" name="radio" placeholder="Role"
+      ng-model="user.role" ng-value="'admin'" ng-required="true"><span>Admin</span>
+      <p class="error validationerror"
+      ng-show="myform.radio.$invalid && myform.radio.$touched">
+      Role is required</p>
+
+      <input class="qutinput qutRadio" type="radio" name="radio" placeholder="Role"
+      ng-model="user.role" ng-value="'supervisor'" ng-required="true"><span>Supervisor</span>
+      <p class="error validationerror"
+      ng-show="myform.radio.$invalid && myform.radio.$touched">
+      Role is required</p>
+
+      <input class="qutinput qutRadio" type="radio" name="radio" placeholder="Role"
+      ng-model="user.role" ng-value="'student'" ng-required="true"><span>Student</span>
+      <p class="error validationerror"
+      ng-show="myform.radio.$invalid && myform.radio.$touched">
+      Role is required</p>
+      </div>
+      <!-- this field is to vaildate if you are an admin -->
+     <!--  <input class="qutinput" type="text" name="adminKey" placeholder="Admin key"
+      ng-model="user.adminKey" ng-change="validateAdmin(user.adminKey)" ng-required="true">
+      <p class="error validationerror"
+      ng-show="myform.adminKey.$invalid && myform.adminKey.$touched">
+      Adminkey is required</p> -->
+
+    </fieldset>
+
+    <button type="submit" class="btn"
+    ng-disabled="myform.$invalid">Register</button>
+    <p style="margin:15px auto;">or <a ng-href="#/login">login</a></p>
+  </form>
+</section>

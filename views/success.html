@@ -1,0 +1,924 @@
+
+<head>
+  <!-- Custom styles for this template -->
+  <link href="style/ProjectMinder.css" rel="stylesheet">
+  <script src="js/services/crud.js"></script>
+</head>
+   
+    <div class="container">
+      	<div class="row">
+
+        <!-- Jack writes code here -->
+
+        <!-- the form when click create button -->
+
+        	<div class="modal fade" role="dialog" id="createform">
+		        <div class="modal-dialog">
+		        	<!-- modal content starts here -->
+		        	<div class="modal-content">
+		        		<!-- popping up form title part -->
+		        		<div class="modal-header">
+		        			<button type="button" class="close" data-dismiss="modal">&times;</button>
+    						<h4 class="modal-title">Create New Project</h4>
+  						</div>
+						<!--END popping up form title part -->
+						<!-- popping up form main part -->
+		        		<div class="modal-body">
+			        		<form class="form-horizontal" 
+			        			  name="createform"
+			        			  novalidate>
+					            <div class="form-group">
+					              	<label for="projectName" class="col-sm-3 control-label">ProjectName</label>
+					              	<div class="col-sm-7">
+						                <input type="text" class="form-control" 
+						                id="projectName" 
+						                placeholder="Project Name"
+						                ng-model="newProject.name"
+						                ng-required="true">
+					              	</div>
+					            </div>
+
+					            <div class="form-group">
+					              	<label for="unit" class="col-sm-3 control-label">Unit</label>
+					              	<div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="Unit" 
+						                placeholder="e.g.IFN701"
+						                ng-model="newProject.unit"
+						                ng-required="true"
+						                >
+					             	</div>
+					            </div>
+								<!-- display the following two fields if Admin -->
+					            <div class="form-group" ng-if="currentUser.role == 'admin'">
+					              	<label for="supervisor" class="col-sm-3 control-label">Supervisor FirstName</label>
+					              	<div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="supervisorFirstName" 
+						                placeholder="e.g. Yanming" 
+						                ng-model="newProject.supervisorFirstName"
+						                ng-required="true"
+						                >
+					              	</div>
+					            </div>
+
+					            <div class="form-group" ng-if="currentUser.role == 'admin'">
+					              	<label for="supervisor" class="col-sm-3 control-label">Supervisor LastName</label>
+					              	<div class="col-sm-7">
+						                <input class="form-control" 
+						                id="supervisorLastName" 
+						                placeholder="e.g. Feng" 
+						                ng-model="newProject.supervisorLastName"
+						                ng-required="true"
+						                >
+					              	</div>
+					            </div>
+								<!-- END display these fields if Admin -->
+
+								<!-- display these fields if NON-Admin -->
+					            <div class="form-group" ng-if="currentUser.role != 'admin'"
+					            >
+					              	<label for="supervisor" class="col-sm-3 control-label">Supervisor FirstName</label>
+					              	<div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="supervisorFirstName" 
+						                placeholder="e.g. Yanming" 
+						                ng-model="newProject.supervisorFirstName = currentUser.firstname"
+						             	readonly="true"
+						                >
+					              	</div>
+					            </div>
+
+					            <div class="form-group" ng-if="currentUser.role != 'admin'">
+					              	<label for="supervisor" class="col-sm-3 control-label">Supervisor LastName</label>
+					              	<div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="supervisorLastName" 
+						                placeholder="e.g. Feng" 
+						                ng-model="newProject.supervisorLastName = currentUser.lastname"
+						                readonly="true"
+						                >
+					              	</div>
+					            </div>
+
+					            <!-- END display these fields if NON-Admin -->
+
+
+					            <!-- uses ng-repeat to enable the student item list to be added dynamicly. -->
+					            
+					            <div ng-repeat="newStudent in newStudents">
+					            	<!-- Student 1-n -->
+						            <div class="form-group">
+						              	<label for="student1" class="col-sm-3 control-label">Student {{$index+1}}</label>
+						              	<div class="col-sm-7">
+							                <input  class="form-control" 
+							                id="student{{$index+1}}" 
+							                placeholder="Student {{$index+1}} Name" 
+							                ng-model="newStudent.name"
+							                ng-required="true"
+							                >
+						              	</div>
+						            </div>
+						        	<!-- END Student 1-n -->
+
+						        	<!-- StuID -->
+						            <div class="form-group">
+						              	<label for="studentnum1" class="col-sm-3 control-label">StuID</label>
+						              	<div class="col-sm-7">
+							                <input  class="form-control" 
+							                id="studentnum{{$index+1}}" 
+							                placeholder="Student {{$index+1}} Number" 
+							                ng-model="newStudent.num"
+							                ng-required="true"
+							                >
+						              	</div>
+						            </div>
+						            <!--END StuID -->
+
+						            <!-- Email -->
+						            <div class="form-group">
+						              <label for="studentEmail1" class="col-sm-3 control-label">Email</label>
+						              <div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="studentemail{{$index+1}}" 
+						                placeholder="Student {{$index+1}} Email" 
+						                ng-model="newStudent.email"
+						                ng-required="true"
+						                >
+						              </div>
+						            </div>
+						            <!-- END Email -->
+					            </div>
+					         	<!-- end of student item list ng-repeat -->
+
+					         	<!-- Calendar-Start Date -->
+					         	<div class="form-group">
+					            	<label for="StartDate" class="col-sm-3 control-label">Start Date</label>
+					            	<div class="col-sm-7">
+					            		<p class="input-group">
+          								<input type="text" class="form-control" 
+          								uib-datepicker-popup="{{format}}" 
+          								ng-model="newProject.startDate" is-open="isOpen.startDate" 
+          								datepicker-options="dateOptions"
+          								ng-required="true" 
+          								close-text="Close" />
+
+          								<span class="input-group-btn">
+                							<button class="btn btn-default" ng-click="open($event,'startDate')">
+                								<i class="glyphicon glyphicon-calendar">
+                								</i>
+                							</button>
+          								</span>
+        								</p>
+					            	</div>
+					        	</div>
+					        	<!-- END Calendar-Start Date -->
+
+					        	<!-- Calendar-End Date -->
+					        	<div class="form-group">
+					            	<label for="EndDate" class="col-sm-3 control-label">End Date</label>
+					            	<div class="col-sm-7">
+					            		<p class="input-group">
+          								<input type="text" class="form-control" 
+          								uib-datepicker-popup="{{format}}" 
+          								ng-model="newProject.endDate" is-open="isOpen.endDate" 
+          								datepicker-options="dateOptions"
+          								ng-required="true" 
+          								close-text="Close" />
+
+          								<span class="input-group-btn">
+                							<button class="btn btn-default" ng-click="open($event,'endDate')">
+                								<i class="glyphicon glyphicon-calendar">
+                								</i>
+                							</button>
+          								</span>
+        								</p>
+					            	</div>
+					        	</div>
+					        	<!-- END Calendar-End Date -->
+
+					        	<!-- Status -->
+					            <div class="form-group">
+					            <label for="Status" class="col-sm-3 control-label">Status</label>
+					            	<div class="col-sm-5">
+						            <select class="form-control"
+						             ng-model="newProject.status"
+						             ng-required="true"
+						             >
+						                <option>Available</option>
+						                <option>Unavailable</option>
+						            </select>
+					            	</div>
+					        	</div>
+					        	<!-- END Status -->
+
+					        	<!-- Description -->
+					        	<div class="form-group">
+					             	<label for="description" class="col-sm-3 control-label">Description</label>
+					              	<div class="col-sm-7">
+						                <textarea  
+						                class="form-control description_size" 
+						                id="description" 
+						                placeholder="Project Description" 
+						                ng-model="newProject.description"
+						                ng-required="true"
+						                row="7"
+						                >
+						            	</textarea>
+					              	</div>
+					            </div>
+					            <!--END Description -->
+			        		</form>
+				        </div>
+				        <!--END popping up form main part -->
+
+				        <div class="modal-footer">
+				        	<div class="form-group">
+				                <div class="col-sm-8 col-sm-offset-2">
+					              	<button type="submit" 
+					                class="btn btn-primary"
+					                ng-click="addStudent()">Add Student</button>
+
+					                <button type="submit" 
+					                class="btn btn-primary"
+					                ng-disabled="createform.$invalid" 
+					                ng-click="addProject()">Submit</button>
+
+					                <button type="submit" 
+					                class="btn btn-warning" 
+					                ng-click="clearForm()">Clear</button>
+				                </div>
+			            	</div>
+				        </div>
+				    </div>
+		        </div>  
+          	</div>
+        <!-- END the form when click create button -->
+
+        
+	       	<div class="col-sm-9">
+	          	<h1 style="font-size:30px;margin-top:15px;margin-bottom:15px; margin-left:25px;color:#191919;">{{currentUser.firstname}} 's Projects</h1>
+	        </div>
+	        <div class="col-sm-3">
+	        	<button style="margin-top:15px; margin-left:65px;" class="btn btn-primary btn-blue-QUT" data-toggle="modal" data-target="#createform" ng-click="clearForm()">Add New</button>
+	        </div>
+
+	          <hr/>
+	        <!-- the popping up form when clicking edit button -->
+          	<div class="modal fade" role="dialog" id="mainForm">
+		        <div class="modal-dialog">
+		        	<!-- modal content starts here -->
+		        	<div class="modal-content">
+		        		<!-- popping up form title part -->
+		        		<div class="modal-header">
+		        			<button type="button" class="close" data-dismiss="modal">&times;</button>
+    						<h4 class="modal-title">Update Project Information</h4>
+  						</div>
+						<!--END popping up form title part -->
+						<!-- popping up form main part -->
+		        		<div class="modal-body">
+				        	<form class="form-horizontal" name="mainform" novalidate>
+				        		<!-- ProjectName -->
+					            <div class="form-group">
+					            	<label for="projectName" class="col-sm-3 control-label">ProjectName</label>
+					              	<div class="col-sm-7">
+						                <input type="text" class="form-control" id="projectName" 
+						                placeholder="Project Name"
+						                ng-model="currentProjectItem.name"
+										ng-required="true"
+						                >
+					              	</div>
+					            </div>
+					            <!-- END ProjectName -->
+
+					            <!-- Unit -->
+					            <div class="form-group">
+					              	<label for="unit" class="col-sm-3 control-label">Unit</label>
+					              	<div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="Unit" 
+						                placeholder="e.g.IFN701"
+						                ng-model="currentProjectItem.unit"
+						                ng-required="true"
+						                >
+					              	</div>
+					            </div>
+					            <!-- END Unit -->
+
+					            <!-- Supervisor FirstName when ADMIN(can overwrite)-->
+					            <div ng-if="currentUser.role == 'admin'" class="form-group">
+						            <label for="supervisor" class="col-sm-3 control-label">Supervisor FirstName</label>
+						            <div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="supervisorFirstName" 
+						                placeholder="e.g. Yanming" 
+						                ng-model="currentProjectItem.supervisorFirstName"
+						                ng-required="true"
+						                >
+						            </div>
+						        </div>
+								<!-- END Supervisor FirstName when ADMIN(can overwrite)-->
+
+								<!-- Supervisor LastName -->
+					            <div class="form-group" ng-if="currentUser.role == 'admin'">
+					              	<label for="supervisor" class="col-sm-3 control-label">Supervisor LastName</label>
+					              	<div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="supervisorLastName" 
+						                placeholder="e.g. Feng" 
+						                ng-model="currentProjectItem.supervisorLastName"
+						                ng-required="true"
+						                >
+					              	</div>
+					            </div>
+					            <!-- END Supervisor LastName when ADMIN(can overwrite)-->
+
+					            <!-- Supervisor FirstName when normal(read-only)-->
+					            <div ng-if="currentUser.role != 'admin'" class="form-group">
+						            <label for="supervisor" class="col-sm-3 control-label">Supervisor FirstName</label>
+						            <div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="supervisorFirstName" 
+						                placeholder="e.g. Yanming" 
+						                ng-model="currentProjectItem.supervisorFirstName"
+						                readonly="true"
+						                ng-required="true"
+						                >
+						            </div>
+						        </div>
+								<!-- END Supervisor FirstName when normal(read-only)-->
+
+								<!-- Supervisor LastName when normal(read-only) -->
+					            <div class="form-group" ng-if="currentUser.role != 'admin'">
+					              	<label for="supervisor" class="col-sm-3 control-label">Supervisor LastName</label>
+					              	<div class="col-sm-7">
+						                <input  class="form-control" 
+						                id="supervisorLastName" 
+						                placeholder="e.g. Feng" 
+						                ng-model="currentProjectItem.supervisorLastName"
+						                readonly="true"
+						                ng-required="true"
+						                >
+					              	</div>
+					            </div>
+					            <!-- END Supervisor LastName when normal(read-only)-->
+
+
+
+					          <!-- uses ng-repeat to enable the student item list to be added dynamicly. -->
+					            <div ng-repeat="student in currentProjectItem.students track by $index">
+					            	<!-- Student 1-n -->
+						            <div class="form-group">
+						              	<label for="student1" class="col-sm-3 control-label">Student {{$index+1}}</label>
+						              	<div class="col-sm-7">
+							                <input  class="form-control" 
+							                id="student{{$index+1}}" 
+							                placeholder="Student {{$index+1}} Name" 
+							                ng-model="student.name"
+							                ng-required="true"
+							                >
+						              	</div>
+						            </div>
+						            <!-- END Student 1-n -->
+
+						            <!-- StuID -->
+						            <div class="form-group">
+						              	<label for="studentnum1" class="col-sm-3 control-label">StuID</label>
+						              	<div class="col-sm-7">
+							                <input  class="form-control" 
+							                id="studentnum{{$index+1}}" 
+							                placeholder="Student Number" 
+							                ng-model="student.num"
+							                ng-required="true"
+							                >
+						              	</div>
+						            </div>
+						            <!-- END StuID -->
+
+						            <!-- Email -->
+						            <div class="form-group">
+								        <label for="studentEmail1" class="col-sm-3 control-label">Email</label>
+								        <div class="col-sm-7">
+							                <input  class="form-control" 
+							                id="studentemail{{$index+1}}" 
+							                placeholder="Student{{$index+1}} Email" 
+							                ng-model="student.email"
+							                ng-required="true"
+							                >
+								        </div>
+								    </div>
+								    <!-- END Email -->
+					            </div>
+							    <!-- end of student item list ng-repeat -->
+
+						    	<!-- Calendar Start Date -->
+					         	<div class="form-group">
+					            	<label for="Status" class="col-sm-3 control-label">Start Date</label>
+					            	<div class="col-sm-7">
+					            		<p class="input-group">
+          								<input type="text" class="form-control" 
+          								uib-datepicker-popup="{{format}}" 
+          								ng-model="currentProjectItem.startDate" is-open="isOpen.startDate" 
+          								datepicker-options="dateOptions"
+          								ng-required="true" 
+          								close-text="Close" />
+
+          								<span class="input-group-btn">
+                							<button class="btn btn-default" ng-click="open($event,'startDate')">
+                								<i class="glyphicon glyphicon-calendar">
+                								</i>
+                							</button>
+          								</span>
+        								</p>
+					            	</div>
+					        	</div>
+					        	<!-- END Calendar Start Date -->
+
+					        	<!-- Calendar End Date -->
+					        	<div class="form-group">
+					            	<label for="StartDate" class="col-sm-3 control-label">End Date</label>
+					            	<div class="col-sm-7">
+					            		<p class="input-group">
+          								<input type="text" class="form-control" 
+          								uib-datepicker-popup="{{format}}" 
+          								ng-model="currentProjectItem.endDate" is-open="isOpen.endDate" 
+          								datepicker-options="dateOptions"
+          								ng-required="true" 
+          								close-text="Close" />
+
+          								<span class="input-group-btn">
+                							<button class="btn btn-default" ng-click="open($event,'endDate')">
+                								<i class="glyphicon glyphicon-calendar">
+                								</i>
+                							</button>
+          								</span>
+        								</p>
+					            	</div>
+					        	</div>
+					        	<!-- END Calendar End Date -->
+
+					            <div class="form-group">
+					              	<label for="Status" class="col-sm-3 control-label">Status</label>
+					              	<div class="col-sm-5">
+						                <select class="form-control" 
+						                		ng-model="currentProjectItem.status"
+						                		ng-required="true"
+						                >
+						                	<option>Available</option>
+						                  	<option>Unavailable</option>
+						                </select>
+					              </div>
+					            </div>
+
+					            <div class="form-group">
+					              	<label for="description" class="col-sm-3 control-label">Description</label>
+						            <div class="col-sm-7">
+						                <textarea  class="form-control description_size" 
+						                id="description" 
+						                placeholder="Project Description" 
+						                ng-model="currentProjectItem.description"
+						                ng-required="true"
+						                row="7">
+						            	</textarea>
+						            </div>
+						        </div>
+
+					        </form>
+				        </div>
+				        <!--END popping up form main part -->
+				        <div class="modal-footer">
+				        	<div class="form-group">
+				              <div class="col-sm-8 col-sm-offset-2">
+				                <!-- <button type="submit" class="btn btn-primary" ng-click="ctr.createNew()">Create New</button> -->
+
+				                <button class="btn btn-success"
+				                		ng-disabled="mainform.$invalid"
+				                		ng-click="saveItem(currentProjectItem)">
+				                		Save</button>
+
+				                <button type="submit" data-dismiss="modal" class="btn btn-warning " ng-click="ctr.createNew()">Cancel</button>
+				              </div>
+				            </div>
+				        </div>
+				    </div>
+		        </div>  
+          	</div>
+	          	<!-- END the popping up form when clicking edit button -->
+
+
+	          	<!-- START the detail popping up form when click on the specific project -->
+
+          	<div class="modal fade" role="dialog" id="detailForm">
+		        <div class="modal-dialog">
+		        	<!-- modal content starts here -->
+		        	<div class="modal-content">
+		        		<!-- popping up form title part -->
+		        		<div class="modal-header">
+		        			<button type="button" class="close" data-dismiss="modal">&times;</button>
+    						<h4 class="modal-title">Project Detail</h4>
+  						</div>
+						<!--END popping up form title part -->
+						<!-- popping up form main part -->
+		        		<div class="modal-body">
+			        	<form class="form-horizontal" name="mainform" novalidate>
+
+			        		<!-- ProjectName -->
+				            <div class="form-group">
+				              	<label for="projectName" class="col-sm-3 control-label">ProjectName</label>
+				              	<div class="col-sm-7">
+				              		<input for="projectName" class="form-control" ng-model="currentProjectItem.name">
+				              	</div>
+				            </div>
+				            <!-- END ProjectName -->
+
+				            <!-- Unit -->
+				            <div class="form-group">
+				              	<label for="unit" class="col-sm-3 control-label">Unit</label>
+				              	<div class="col-sm-7">
+				                	<input ng-model="currentProjectItem.unit" for="projectUnit" class="form-control">
+				              	</div>
+				            </div>
+				            <!-- END Unit -->
+
+				            <!-- Supervisor Firstname -->
+				            <div class="form-group">
+					            <label for="supervisorFirstName" class="col-sm-3 control-label">supervisor firstname</label>
+					            <div class="col-sm-7">
+					            	<input ng-model="currentProjectItem.supervisorFirstName" for="supervisorFirstName" class="form-control">
+					            </div>
+					        </div>
+					        <!--END Supervisor Firstname -->
+
+					        <!-- Supervisor Lastname -->
+				            <div class="form-group">
+				              	<label for="supervisorLastName" class="col-sm-3 control-label">supervisor lastname</label>
+				              	<div class="col-sm-7">
+				               		<input ng-model="currentProjectItem.supervisorLastName" for="supervisorLastName" class="form-control">
+				              	</div>
+				            </div>
+				            <!-- END Supervisor Lastname -->
+
+				          <!-- uses ng-repeat to enable the student item list to be added dynamicly. -->
+				            <div ng-repeat="student in currentProjectItem.students">
+				            	<!-- Student 1-n -->
+					            <div class="form-group">
+					              	<label for="student+{{$index+1}}" class="col-sm-3 control-label">student {{$index+1}}</label>
+					              	<div class="col-sm-7">
+					                	<input ng-model="student.name" for="student{{$index+1}}" class="form-control">
+					              	</div>
+					            </div>
+					            <!-- END Student 1-n -->
+
+					            <!-- StuID -->
+					            <div class="form-group">
+					              	<label for="studentnum1" class="col-sm-3 control-label">stuID</label>
+					              	<div class="col-sm-7">
+					                	<input  ng-model="student.num" class="form-control" 
+					                	for="studentnum{{$index+1}}" 
+					                	>
+					              	</div>
+					            </div>
+					            <!-- END StuID -->
+
+					            <!-- Email -->
+					            <div class="form-group">
+					              	<label for="studentEmail1" class="col-sm-3 control-label">Email</label>
+					              	<div class="col-sm-7">
+					                	<input ng-model="student.email" class="form-control" 
+					               		for="studentemail{{$index+1}}" 
+					                	>
+					              	</div>
+					              	<span class="glyphicon glyphicon-evnelope" data-toggle="modal" data-target="#emailForm" ng-click="setEmailAddress(student,emailform)"></span>
+					              	 <!-- email icon / currently not an email icon-->
+					            </div>
+					            
+				            </div>
+					        <!-- end of student item list ng-repeat -->
+
+					    <!-- Calender-StartDate -->
+						    <div class="form-group">
+				              	<label for="startDate" class="col-sm-3 control-label">StartDate</label>
+				              	<div class="col-sm-7">
+					                <p class="form-control" 
+					                for="startDate" 
+					                >{{currentProjectItem.startDate.slice(4,15)}}</p>
+				              	</div>
+					        </div>
+				        <!-- END Calender-StartDate -->
+
+				        <!-- Calender-EndDate -->
+					        <div class="form-group">
+				              	<label for="startDate" class="col-sm-3 control-label">EndDate</label>
+				              	<div class="col-sm-7">
+					                <p class="form-control" 
+					                for="startDate" 
+					                >{{currentProjectItem.endDate.slice(4,15)}}</p>
+				              	</div>
+					        </div>
+				        <!-- END Calender-EndDate -->
+
+				        <!-- Status -->
+				            <div class="form-group">
+				              	<label for="Status" class="col-sm-3 control-label">Status</label>
+					            <div class="col-sm-5">
+					                <p class="form-control" 
+						                for="Status">
+						                {{currentProjectItem.status}}
+						            </p>
+					            </div>
+				            </div>
+			            <!-- END Status -->
+
+			            <!-- Description -->
+				            <div class="form-group">
+				              	<label for="description" class="col-sm-3 control-label">Description</label>
+				              	<div class="col-sm-7">
+					                <textarea  class="form-control description_size" 
+					                id="description" 
+					                placeholder="Project Description" 
+					                ng-model="currentProjectItem.description"
+					                ng-required="true"
+					                row="7">
+					            	</textarea>
+				              	</div>
+					        </div>
+				        <!-- END Description -->
+				    	</form>
+						</div>
+				        <!--END popping up form main part -->
+				        <div class="modal-footer">
+				        	<div class="form-group">
+				            </div>
+				        </div>
+				    </div>
+		        </div>  
+          	</div>
+	        <!-- END the popping up detail form when clicking on specific project -->
+
+	          
+			<!-- form for input email content -->
+
+			<div class="modal fade" role="dialog" id="emailForm">
+		        <div class="modal-dialog">
+		        	<!-- modal content starts here -->
+		        	<div class="modal-content">
+		        		<!-- popping up form title part -->
+		        		<div class="modal-header">
+		        			<button type="button" class="close" data-dismiss="modal">&times;</button>
+    						<h4 class="modal-title">Send Email to {{emailform.name}}</h4>
+  						</div>
+						<!--END popping up form title part -->
+						<!-- popping up form main part -->
+		        		<div class="modal-body">
+				        	<form class="form-horizontal" name="emailForm" novalidate>
+				        		<!-- Send To -->
+					            <div class="form-group">
+					            	<label for="sendto" class="col-sm-3 control-label">Send To</label>
+					              	<div class="col-sm-7">
+						                <input type="text" class="form-control" id="sendto" 
+						                placeholder="Send To"
+						                ng-model="emailform.email"
+										ng-required="true"
+						                >
+					              	</div>
+					            </div>
+					            <!-- END Send To -->
+
+					            <!-- Subject -->
+					            <div class="form-group">
+					            	<label for="subject" class="col-sm-3 control-label">Subject</label>
+					              	<div class="col-sm-7">
+						                <input type="text" class="form-control" id="subject" 
+						                placeholder="Subject"
+						                ng-model="emailform.subject"
+										ng-required="true"
+						                >
+					              	</div>
+					            </div>
+					            <!-- END Subject -->
+
+								<!-- input content -->
+					            <div class="form-group">
+					              	<label for="emailcontent" class="col-sm-3 control-label">Content</label>
+						            <div class="col-sm-7">
+						                <textarea  class="form-control description_size" 
+						                id="emailcontent" 
+						                placeholder="Please write content here" 
+						                ng-model="emailform.content"
+						                ng-required="true"
+						                row="7">
+						            	</textarea>
+						            </div>
+						        </div>
+						        <!-- END input content -->
+
+					        </form>
+				        </div>
+				        <!--END popping up form main part -->
+				        <div class="modal-footer">
+				        	<div class="form-group">
+				              <div class="col-sm-8 col-sm-offset-2">
+				                <!-- <button type="submit" class="btn btn-primary" ng-click="ctr.createNew()">Create New</button> -->
+
+				                <button class="btn btn-success"
+				                		ng-disabled="emailForm.$invalid"
+				                		ng-click="sendMail(emailform.email,emailform.subject)">
+				                		Send</button>
+
+				                <button class="btn btn-warning " ng-click="ctr.createNew()">Cancel</button>
+				              </div>
+				            </div>
+				        </div>
+				    </div>
+		        </div>  
+          	</div>
+          	<!-- END form for input email content -->
+
+          	<!-- The confirm popup when user clicks "delete" -->
+
+							<div class="modal fade" role="dialog" id="confirmDelete">
+						        <div class="modal-dialog">
+						        	<!-- modal content starts here -->
+						        	<div class="modal-content">
+						        		<!-- popping up form title part -->
+						        		<div class="modal-header">
+				    						<h4 class="modal-title">Delete Record</h4>
+				  						</div>
+										<!--END popping up form title part -->
+										<!-- popping up form main part -->
+						        		<div class="modal-body">
+								        	<form class="form-horizontal" name="confirmDelete" novalidate>
+								        		This record will be permenantly removed from the server,Please confirm!
+									        </form>
+								        </div>
+								        <!--END popping up form main part -->
+								        <div class="modal-footer">
+								        	<div class="form-group">
+								              <div class="col-sm-8 col-sm-offset-2">
+								                <!-- <button type="submit" class="btn btn-primary" ng-click="ctr.createNew()">Create New</button> -->
+
+								                <button class="btn btn-info"
+								                		ng-click="">
+								                		Cancel</button>
+
+								                <button class="btn btn-danger" data-dismiss="modal" ng-click="deleteItem(currentProjectItem)">Confirm</button>
+								              </div>
+								            </div>
+								        </div>
+								    </div>
+						        </div>  
+				          	</div>
+			          	<!-- END The confirm popup when user clicks "delete" -->
+
+
+
+	        <!-- END of the form part -->
+
+
+
+	        <!-- the search bar -->
+	        <form id="QUT-top-search2" class="navbar-form navbar-right">
+            	<!-- <input type="text" class="form-control" placeholder="Search..."> -->
+            	<input type="text" ng-model="query" class="search-input" placeholder="Query...">
+          	</form>
+	        <!-- END the search bar -->
+	        <div class="col-sm-10">
+				<uib-alert ng-show="copyrightAlert.type" type="{{copyrightAlert.type}}"
+				close="closeAlert(copyrightAlert)">{{copyrightAlert.msg}}</uib-alert>
+			</div>
+	        <div class="col-sm-10">
+				<uib-alert ng-show="alerts.type" type="{{alerts.type}}" 
+				close="closeAlert(alerts)">{{alerts.msg}}</uib-alert>
+			</div>
+	        <!-- the table part -->
+	        <div class="col-sm-12" style="min-height:400px;">
+	            <table style="text-align:center;" class="table table-striped table-hover">
+	                <tr>
+	                  <!-- <th style="width:200px;">Project</th>
+	                  <th style="width:70px;">Unit</th>
+	                  <th style="width:170px;">Supervisor</th>
+	                  <th style="width:95px;">Group Size</th>
+	                  <th style="width:165px;">Leader</th> -->
+	                  <th class="QUT-th" style="width:210px;">Project</th>
+	                  <th class="QUT-th" style="width:86px;">Unit</th>
+	                  <th class="QUT-th" style="width:136px;">Supervisor</th>
+	                  <th class="QUT-th" style="width:116px;">Group Size</th>
+	                  <th class="QUT-th" style="width:124px;">Leader</th>
+	                  <th class="QUT-th" style="width:116px;">StartDate</th>
+	                  <th class="QUT-th" style="width:116px;">EndDate</th>
+	                  <th class="QUT-th" style="width:50px;"></th>
+	                  <th class="QUT-th" style="width:50px;"></th>
+	                </tr>
+					<!-- <tr ng-repeat="project in ctr.ProjectMinderItems" ng-click="ctr.setSelectedItem($index)"> This enables user to edit information by clicking on any parts of the row.--> 
+
+	                <!-- show all projects when login as admin -->
+	                <tr ng-show="currentUser.role == 'admin'" ng-hide="currentUser.role != 'admin'" dir-paginate="project in projectItems | filter:query | itemsPerPage:8" pagination-id="admin">
+	                    <td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">{{project.name}}</td>
+	                    <td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">{{project.unit}}</td>
+	                  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">{{project.supervisorFirstName+" "+project.supervisorLastName}}</td>
+
+	                  	<!-- <td>
+		                  	<select class="form-control"  ng-init="selectedStudent = project.students[0]"  ng-change="selectedStudent = selectedStudent || project.students[0]" ng-model="selectedStudent" ng-options="studentInfo.name for studentInfo in project.students">  -->
+		                  	<!-- the "||" in ng-change is to prevent empty studentName displayed when the project item has been changed. If the current selected name/item info has been changed, the displaying student name will be set to the first student's name(project.students[0]),which is the inital default value -->
+<!-- 		                  	</select>
+		              	</td> -->
+
+	              	  	<!-- <td data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)"
+	              	  	  ng-repeat="student in project.students | filter:{ name:selectedStudent.name }">
+	              	  		{{student.num}}
+	              	  	</td> -->
+
+	              	  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">Group of {{project.students.length}}</td>
+
+	              	  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">{{project.students[0].name}}</td>
+
+		              	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">
+		              	  	{{project.startDate.slice(4,15)}}
+		              	</td>
+
+	                  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">
+	                  		{{project.endDate.slice(4,15)}}
+	                  	</td>
+
+		                  <td>
+		                  	<button class="btn btn-sm btn-primary btn-blue-QUT" data-toggle="modal" data-target="#mainForm" ng-click="setSelectedProjectItem(project.$id);">
+		                  		<!-- <span class="glyphicon glyphicon-edit"></span> -->
+		                  	Update
+		                  	</button>
+		                  </td>
+		                  <td style="border-right:none;">
+		                  	<button class="btn btn-sm btn-danger btn-red-QUT" data-toggle="modal" data-target="#confirmDelete" ng-click="setSelectedProjectItem(project.$id)">
+		                  	<!-- <button class="btn btn-danger" ng-click="projectItems.$remove(project);"> -->
+		                  	Delete
+		                  	</button>
+		                  </td>
+
+		                
+	                </tr> 
+	                <!-- END show all projects when login as admin -->
+					
+
+	                <!-- show only the currentUser's projects when not admin -->
+	                <tr ng-show="currentUser.role !== 'admin'" ng-hide="currentUser.role == 'admin'" dir-paginate="project in projectItems | filter:{supervisorFirstName:currentUser.firstname,supervisorLastName:currentUser.lastname} | filter:query | itemsPerPage:8" pagination-id="staff">
+	                  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">{{project.name}}</td>
+	                  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">{{project.unit}}</td>
+	                  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">{{project.supervisorFirstName+" "+project.supervisorLastName}}</td>
+	                  	<!-- <td>
+		                  	<select class="form-control"  ng-init="selectedStudent = project.students[0]"  ng-change="selectedStudent = selectedStudent || project.students[0]" ng-model="selectedStudent" ng-options="studentInfo.name for studentInfo in project.students">  -->
+		                  	<!-- the "||" in ng-change is to prevent empty studentName displayed when the project item has been changed. If the current selected name/item info has been changed, the displaying student name will be set to the first student's name(project.students[0]),which is the inital default value -->
+<!-- 		                  	</select>
+
+	              	  	</td>
+ -->
+		              	<!-- <td data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)"
+		              	  	  ng-repeat="student in project.students | filter:{ name:selectedStudent.name }">
+		              	  	{{student.num}}
+		              	</td> -->
+						<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">Group of {{project.students.length}}</td>
+
+	              	  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">{{project.students[0].name}}</td>
+						
+		              	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">
+		              	  	{{project.startDate.slice(4,15)}}
+		              	</td>
+
+	                  	<td class="tableRowLineHeight" data-toggle="modal" data-target="#detailForm" ng-click="setSelectedProjectItem(project.$id)">
+	              	  		{{project.endDate.slice(4,15)}}
+	              	  	</td>
+
+	                  	<td>
+		                  	<button class="btn btn-sm btn-primary btn-blue-QUT" data-toggle="modal" data-target="#mainForm" ng-click="setSelectedProjectItem(project.$id);">
+		                  		<!-- <span class="glyphicon glyphicon-edit"></span> -->
+		                  		Update
+		                  	</button>
+	                  	</td>
+	                  	<td style="border-right:none;">
+	                  		<button class="btn btn-sm btn-danger btn-red-QUT" data-toggle="modal" data-target="#confirmDelete" ng-click="setSelectedProjectItem(project.$id)">
+		                  	<!-- <button class="btn btn-danger" ng-click="projectItems.$remove(project);"> -->
+		                  	<!-- <span class="glyphicon glyphicon-trash"></span> -->
+		                  	Delete
+	                  		</button>
+	                  	</td>
+	                   <!--  <td>
+	                    	<a href="javascript:void(0);" onclick="javascript:window.location.href='mailto:jackli900421@hotmail.com'; return false;">Email</a>
+	                  	</td> -->
+
+	                </tr>
+	            	<!-- END show only the currentUser's projects when not admin --> 
+
+	            </table>
+				<dir-pagination-controls 
+						template-url="js/lib/dirPagination.tpl.html" style="float:right;" pagination-id="admin" ng-hide="currentUser.firstname != 'admin'">
+				</dir-pagination-controls>
+				<dir-pagination-controls 
+						template-url="js/lib/dirPagination.tpl.html" style="float:right;" pagination-id="staff" ng-hide="currentUser.firstname == 'admin'">
+				</dir-pagination-controls>
+
+	        </div>
+      	<!-- END of the table part -->
+			
+        <!-- Jack's code ends here -->
+    	</div>
+    </div>
+
+
