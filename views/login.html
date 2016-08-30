@@ -2,12 +2,16 @@
 
   <!-- Custom styles for this template -->
   <link href="style/login.css" rel="stylesheet">
-  
+  <style>
+    .ng-cloak {
+      display: none;
+    }
+  </style>
 </head>
     
 
 
-<section class="card login">
+<section class="card login ng-cloak">
   <form name="myform"
     ng-submit="login()"
     novalidate>
