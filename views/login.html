@@ -1,44 +1,33 @@
 <head>
-
-  <!-- Custom styles for this template -->
-  <link href="style/login.css" rel="stylesheet">
-  <style>
+<!-- Custom styles for this template -->
+<link href="style/login.css" rel="stylesheet">
+<style>
     .ng-cloak {
       display: none;
     }
-  </style>
+</style>
 </head>
-    
-
-
 <section class="card login ng-cloak">
-  <form name="myform"
-    ng-submit="login()"
-    novalidate>
-	<h1 class="qutheader">PROJECT MINDER</h1>
-    <div class="textintro">
-      <p class="message" 
-        ng-show="message"> {{ message }}</p>
-    </div>
-
-    <fieldset class="qutinputgroup">
-      <input class="qutinput" type="email" name="email" placeholder="Email"
-       ng-model="user.email" ng-required="true">
-      <p class="error validationerror"
-      ng-show="myform.email.$invalid && myform.email.$touched">
-      Must be a valid email</p>
-
-
-      <input class="qutinput" type="password" name="password" placeholder="Password"
-      ng-model="user.password" ng-required="true">
-      <p class="error validationerror"
-      ng-show="myform.password.$invalid && myform.email.$touched">
-      Password is required</p>
-
-    </fieldset>
-
-    <button type="submit" class="btn"
-      ng-disabled="myform.$invalid">Login</button>
-    <p style="margin:15px auto;">or <a ng-href="#/register">register</a></p>
-  </form>
+<form name="myform" ng-submit="login()" novalidate>
+  <h1 class="qutheader">PROJECT MINDER</h1>
+  <div class="textintro">
+    <p class="message" ng-show="message">
+       {{ message }}
+    </p>
+  </div>
+  <fieldset class="qutinputgroup">
+    <input class="qutinput" type="email" name="email" placeholder="Email" ng-model="user.email" ng-required="true">
+    <p class="error validationerror" ng-show="myform.email.$invalid && myform.email.$touched">
+      Must be a valid email
+    </p>
+    <input class="qutinput" type="password" name="password" placeholder="Password" ng-model="user.password" ng-required="true">
+    <p class="error validationerror" ng-show="myform.password.$invalid && myform.email.$touched">
+      Password is required
+    </p>
+  </fieldset>
+  <button type="submit" class="btn" ng-disabled="myform.$invalid">Login</button>
+  <p style="margin:15px auto;">
+    or <a ng-href="#/register">register</a>
+  </p>
+</form>
 </section>
